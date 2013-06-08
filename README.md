@@ -1,5 +1,7 @@
 # fs-compare
 
+[![Build Status](https://secure.travis-ci.org/jdeal/fs-compare.png)](http://travis-ci.org/jdeal/fs-compare)
+
 Simple comparison of attributes of two files.
 
 # Installation
