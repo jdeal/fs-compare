@@ -10,6 +10,17 @@ var smallFileName = Path.join(tmpDir, 'small.txt');
 var bigFileName = Path.join(tmpDir, 'big.txt');
 var missingFileName = Path.join(tmpDir, 'missing.txt');
 
+var fsCompareSync = fsCompare.sync;
+
+var testCompare = function (key, a, b, expectedDiff, done) {
+  var diff = fsCompareSync[key](a, b);
+  expect(diff).to.equal(expectedDiff);
+  fsCompare[key](a, b, function (err, diff) {
+    expect(diff).to.equal(expectedDiff);
+    done();
+  });
+};
+
 describe('fs-compare', function () {
   before(function (done) {
     var writeSmallFile, writeBigFile;
@@ -30,47 +41,46 @@ describe('fs-compare', function () {
   });
   describe('mtime', function (done) {
     it('should say small file came before big file', function (done) {
-      fsCompare.mtime(smallFileName, bigFileName, function (err, diff) {
-        expect(diff).to.equal(-1);
-        done();
-      });
+      testCompare('mtime', smallFileName, bigFileName, -1, done);
     });
     it('should say big file came after small file', function (done) {
-      fsCompare.mtime(bigFileName, smallFileName, function (err, diff) {
-        expect(diff).to.equal(1);
-        done();
-      });
+      testCompare('mtime', bigFileName, smallFileName, 1, done);
     });
     it('should say big file has same date as big file', function (done) {
-      fsCompare.mtime(bigFileName, bigFileName, function (err, diff) {
-        expect(diff).to.equal(0);
-        done();
-      });
+      testCompare('mtime', bigFileName, bigFileName, 0, done);
     });
     it('should say missing file came before small file', function (done) {
-      fsCompare.mtime(missingFileName, smallFileName, function (err, diff) {
-        expect(diff).to.equal(-1);
-        done();
-      });
+      testCompare('mtime', missingFileName, smallFileName, -1, done);
     });
   });
   describe('size', function () {
     it('should say small file is smaller', function (done) {
-      fsCompare.size(smallFileName, bigFileName, function (err, diff) {
-        expect(diff).to.equal(-1);
-        done();
-      });
+      testCompare('size', smallFileName, bigFileName, -1, done);
     });
     it('should say big file is bigger', function (done) {
-      fsCompare.size(bigFileName, smallFileName, function (err, diff) {
-        expect(diff).to.equal(1);
-        done();
-      });
+      testCompare('size', bigFileName, smallFileName, 1, done);
     });
     it('should say small file is equal to samll file', function (done) {
-      fsCompare.size(smallFileName, smallFileName, function (err, diff) {
-        expect(diff).to.equal(0);
-        done();
+      testCompare('size', smallFileName, smallFileName, 0, done);
+    });
+  });
+  describe('custom', function () {
+    it('should use custom function', function (done) {
+      var syncCtimeFn = function (fileName) {
+        return fs.statSync(fileName).ctime;
+      };
+      var diff = fsCompare.sync(syncCtimeFn, smallFileName, bigFileName);
+      expect(diff).to.equal(-1);
+      var ctimeFn = function (fileName, cb) {
+        fs.stat(fileName, function (err, stat) {
+          if (err) {
+            return cb(err);
+          }
+          return cb(null, stat.ctime);
+        });
+      };
+      fsCompare(ctimeFn, smallFileName, bigFileName, function (err) {
+        done(err);
       });
     });
   });
