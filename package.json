@@ -1,6 +1,6 @@
 {
   "name": "fs-compare",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "description": "Compare file stats of two files.",
   "main": "index.js",
   "scripts": {
