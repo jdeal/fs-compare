@@ -4,15 +4,15 @@
 
 Simple comparison of attributes of two files.
 
-# Installation
+## Installation
 
 ```bash
 npm install fs-compare
 ```
 
-# Usage
+## Usage
 
-## Asynchronous
+### Asynchronous
 
 ```js
 var fsCompare = require('fs-compare');
@@ -45,7 +45,7 @@ fsCompare.ctime('foo.txt', 'bar.txt', function (err, diff) {
 });
 ```
 
-## Synchronous
+### Synchronous
 
 ```js
 var fsCompareSync = require('fs-compare').sync;
@@ -73,9 +73,9 @@ var diff = fsCompareSync.mtime(modifiedTime, 'foo.txt', 'bar.txt');
 // diff is 1 if foo.txt was created after bar.txt
 ```
 
-# API
+## API
 
-## fsCompare(testFunction, fileNameA, fileNameB, callback)
+### fsCompare(testFunction, fileNameA, fileNameB, callback)
 
 - `testFunction` - Function with parameters `(fileName, cb)` which tests the
 file and returns the value to be compared on the callback.
@@ -85,38 +85,38 @@ file and returns the value to be compared on the callback.
     - 0 - file A tests equal to file B
     - 1 - file A tests greater than file B
 
-## fsCompare.mtime(fileNameA, fileNameB, callback)
+### fsCompare.mtime(fileNameA, fileNameB, callback)
 
 Compares the modified timestamp of the files.
 
-## fsCompare.ctime(fileNameA, fileNameB, callback)
+### fsCompare.ctime(fileNameA, fileNameB, callback)
 
 Compares the created timestamp of the files.
 
-## fsCompare.atime(fileNameA, fileNameB, callback)
+### fsCompare.atime(fileNameA, fileNameB, callback)
 
 Compares the access timestamp of the files.
 
-## fsCompare.size(fileNameA, fileNameB, callback)
+### fsCompare.size(fileNameA, fileNameB, callback)
 
 Compares the size of the files.
 
-## fsCompareSync(testFunction, fileNameA, fileNameB)
+### fsCompareSync(testFunction, fileNameA, fileNameB)
 
 Synchronous version of `fsCompare`.
 
-## fsCompareSync.mtime(fileNameA, fileNameB, callback)
+### fsCompareSync.mtime(fileNameA, fileNameB, callback)
 
 Synchronous version of `fsCompare.mtime`.
 
-## fsCompareSync.ctime(fileNameA, fileNameB, callback)
+### fsCompareSync.ctime(fileNameA, fileNameB, callback)
 
 Synchronous version of `fsCompare.ctime`.
 
-## fsCompareSync.atime(fileNameA, fileNameB, callback)
+### fsCompareSync.atime(fileNameA, fileNameB, callback)
 
 Synchronous version of `fsCompare.atime`.
 
-## fsCompareSync.size(fileNameA, fileNameB, callback)
+### fsCompareSync.size(fileNameA, fileNameB, callback)
 
 Synchronous version of `fsCompare.size`.
